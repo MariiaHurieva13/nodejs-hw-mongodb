@@ -2,10 +2,9 @@ import express from 'express';
 import pinoHttp from 'pino-http';
 import pino from 'pino';
 import cors from 'cors';
-import { getEnvVar } from './utils/getEnvVar.js';
 import { contactService } from './services/contacts.js';
 
-const PORT = Number(getEnvVar('PORT', '3000'));
+const PORT = Number(process.env.PORT || 3000); // Простой способ без утилиты
 
 const logger = pino({
   transport: {
@@ -38,11 +37,7 @@ export const setupServer = () => {
   app.get('/contacts', async (req, res, next) => {
     try {
       const contacts = await contactService.getAllContacts();
-      res.json({
-        status: 200,
-        message: 'Successfully found contacts!',
-        data: contacts,
-      });
+      res.json(contacts);
     } catch (error) {
       next(error);
     }
@@ -53,24 +48,13 @@ export const setupServer = () => {
       const { contactId } = req.params;
       const contact = await contactService.getContactById(contactId);
 
-      if (!contact) {
-        return res.status(404).json({
-          status: 404,
-          message: 'Contact not found',
-        });
-      }
-
-      res.json({
-        status: 200,
-        message: `Successfully found contact with id ${contactId}!`,
-        data: contact,
-      });
+      res.status(contact.status).json(contact);
     } catch (error) {
       next(error);
     }
   });
 
-  app.use((error, req, res) => {
+  app.use((error, req, res, next) => {
     console.error('Error occurred:', error);
     res.status(500).json({
       status: 500,
