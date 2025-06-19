@@ -4,7 +4,7 @@ import pino from 'pino';
 import cors from 'cors';
 import { contactService } from './services/contacts.js';
 
-const PORT = Number(process.env.PORT || 3000); // Простой способ без утилиты
+const PORT = Number(process.env.PORT || 3000); 
 
 const logger = pino({
   transport: {
