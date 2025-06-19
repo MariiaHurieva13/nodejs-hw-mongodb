@@ -4,8 +4,14 @@ import { setupServer } from './server.js';
 
 dotenv.config();
 
-// Connect to MongoDB first
-await initMongoConnection();
-
-// Then start the server
-setupServer();
+try {
+  // Connect to MongoDB first
+  await initMongoConnection();
+  console.log('MongoDB connected successfully');
+  
+  // Then start the server
+  await setupServer();
+} catch (error) {
+  console.error('Failed to start application:', error);
+  process.exit(1);
+}
