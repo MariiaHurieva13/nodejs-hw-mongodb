@@ -4,7 +4,7 @@ import pino from 'pino';
 import cors from 'cors';
 import { contactService } from './services/contacts.js';
 
-const PORT = Number(process.env.PORT || 3000); 
+const PORT = Number(process.env.PORT || 3000);
 
 const logger = pino({
   transport: {
@@ -48,25 +48,29 @@ export const setupServer = () => {
       const { contactId } = req.params;
       const contact = await contactService.getContactById(contactId);
 
-      res.status(contact.status).json(contact);
+      if (!contact) {
+        return res.status(404).json({ status: 404, message: 'Contact not found' });
+      }
+      res.json(contact);
     } catch (error) {
       next(error);
     }
   });
 
-  app.use((error, req, res, next) => {
-    console.error('Error occurred:', error);
-    res.status(500).json({
-      status: 500,
-      message: 'Internal server error',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong',
-    });
-  });
-
+  // Обработчик 404 — после всех роутов
   app.use('*', (req, res) => {
     res.status(404).json({
       status: 404,
       message: 'Route not found',
+    });
+  });
+  
+  app.use((error, req, res, next) => {
+    req.log.error(error); // pino-http логирует ошибку
+    res.status(500).json({
+      status: 500,
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong',
     });
   });
 
