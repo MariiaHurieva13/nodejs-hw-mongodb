@@ -58,7 +58,7 @@ export const setupServer = () => {
   });
 
   // Обработчик 404 — после всех роутов
-  app.use('*', (req, res) => {
+  app.use( (req, res) => {
     res.status(404).json({
       status: 404,
       message: 'Route not found',
