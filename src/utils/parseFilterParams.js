@@ -14,8 +14,8 @@ const parseContactType = (type) => {
 const parseBoolean = (value) => {
   if (typeof value === 'string') {
     const lowerCasedValue = value.toLowerCase();
-    if (lowerCasedValue === 'true') return true;
-    if (lowerCasedValue === 'false') return false;
+    if (lowerCasedValue === 'true') return 'true';
+    if (lowerCasedValue === 'false') return 'false';
   }
   if (typeof value === 'boolean') return value;
 
