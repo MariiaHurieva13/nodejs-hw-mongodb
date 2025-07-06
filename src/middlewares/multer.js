@@ -1,13 +1,22 @@
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 import multer from 'multer';
-import { TEMP_UPLOAD_DIR } from '../constants/index.js';
+import dotenv from 'dotenv';
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, TEMP_UPLOAD_DIR);
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now();
-    cb(null, `${uniqueSuffix}_${file.originalname}`);
+dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'contacts', // або інша назва, яку хочеш
+    allowed_formats: ['jpg', 'png'],
+    public_id: (req, file) => `${Date.now()}_${file.originalname}`,
   },
 });
 
