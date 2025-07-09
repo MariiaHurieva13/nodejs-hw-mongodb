@@ -18,7 +18,7 @@ export const getAllContacts = async ({
   if (filter.type) {
     contactsQuery.where('contactType').equals(filter.type);
   }
-  if (filter.isFavourite !== undefined) {
+  if (filter.isFavourite) {
     contactsQuery.where('isFavourite').equals(filter.isFavourite);
   }
 
@@ -40,34 +40,22 @@ export const getAllContacts = async ({
 };
 
 export const getContactById = async (contactId, userId) => {
-  return await ContactsCollection.findOne({ _id: contactId, userId });
+  const contact = await ContactsCollection.findOne({ _id: contactId, userId });
+  return contact;
 };
 
 export const createContact = async (payload) => {
-  if (!payload.name || !payload.contactType) {
-    throw new Error('Missing required fields: name and contactType');
-  }
-
-  const safePayload = {
-    ...payload,
-    isFavourite:
-      typeof payload.isFavourite === 'boolean'
-        ? payload.isFavourite
-        : payload.isFavourite === 'true',
-    photo:
-      typeof payload.photo === 'string' || payload.photo === null
-        ? payload.photo
-        : payload.photo?.path || null,
-  };
-
-  return await ContactsCollection.create(safePayload);
+  const contact = await ContactsCollection.create(payload);
+  return contact;
 };
 
 export const deleteContact = async (contactId, userId) => {
-  return await ContactsCollection.findOneAndDelete({
+  const contact = await ContactsCollection.findOneAndDelete({
     _id: contactId,
     userId,
   });
+
+  return contact;
 };
 
 export const updateContact = async (
@@ -76,26 +64,14 @@ export const updateContact = async (
   payload,
   options = {},
 ) => {
-  const safePayload = {
-    ...payload,
-    isFavourite:
-      typeof payload.isFavourite === 'boolean'
-        ? payload.isFavourite
-        : payload.isFavourite === 'true',
-    photo:
-      typeof payload.photo === 'string' || payload.photo === null
-        ? payload.photo
-        : payload.photo?.path || null,
-  };
-
   const rawResult = await ContactsCollection.findOneAndUpdate(
     { _id: contactId, userId },
-    safePayload,
+    payload,
     {
       new: true,
       includeResultMetadata: true,
       ...options,
-    }
+    },
   );
 
   if (!rawResult || !rawResult.value) return null;

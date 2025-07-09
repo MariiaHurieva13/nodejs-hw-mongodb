@@ -22,6 +22,7 @@
   "homepage": "https://github.com/serhiilukianenkodev/nodejs-hw-mongodb#readme",
   "devDependencies": {
     "@eslint/js": "^9.28.0",
+    "@types/node": "^24.0.12",
     "eslint": "^9.28.0",
     "globals": "^16.2.0",
     "nodemon": "^3.1.10",
@@ -29,18 +30,19 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.7.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "dotenv": "^16.5.0",
+    "dotenv": "^16.6.1",
     "express": "^5.1.0",
     "handlebars": "^4.7.8",
     "http-errors": "^2.0.0",
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.15.1",
+    "mongoose": "^8.16.2",
     "multer": "^2.0.1",
-    "multer-storage-cloudinary": "^4.0.0",
-    "nodemailer": "^7.0.3",
+    "nodemailer": "^7.0.5",
     "pino-http": "^10.5.0"
   }
 }
