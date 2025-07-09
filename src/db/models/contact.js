@@ -5,29 +5,40 @@ const contactSchema = new Schema(
     name: {
       type: String,
       required: true,
+      trim: true,
     },
     phoneNumber: {
       type: String,
       required: true,
+      trim: true,
     },
     email: {
       type: String,
-      required: false,
+      match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email'],
+      trim: true,
     },
-    isFavourite: { type: Boolean, default: false },
-
+    isFavourite: {
+      type: Boolean,
+      default: false,
+    },
     contactType: {
       type: String,
       required: true,
       enum: ['work', 'home', 'personal'],
       default: 'personal',
+      lowercase: true,
+      trim: true,
     },
     userId: {
       type: Schema.Types.ObjectId,
       ref: 'users',
       required: true,
     },
-    photo: { type: String },
+    photo: {
+      type: String,
+      default: null,
+      trim: true,
+    },
   },
   {
     timestamps: true,
