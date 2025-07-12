@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import dotenv from 'dotenv';
 import { initMongoConnection } from '../db/initMongoConnection.js';
-import { ContactsCollection } from '../models/contact.js';
+import { ContactsCollection } from '../db/models/contact.js'; // Виправлений шлях
 
 dotenv.config();
 
